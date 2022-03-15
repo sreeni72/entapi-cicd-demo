@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="entapi-cicd-demo-test-suite.xml" />
+	<munit:test name="entapi-cicd-hello-success-test-case-assert-equals" doc:id="de1ac6c3-f8b9-45d4-a26a-f24f28151a6a" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="ef2385af-8b10-416e-a1ef-0bb6da67960b">
+				<munit:attributes value='#[{queryParams:{fname:"sreeni",lname:"kandimalla"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to entapi-cicd-helloFlow" doc:id="7b6cc2fd-f30d-4475-b1ee-08713b64c82c" name="entapi-cicd-helloFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<logger level="INFO" doc:name="Logger" doc:id="d01aaaad-e326-4e82-90ef-4b98bbec9593" message="#[payload]"/>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="ea5354c5-d9e9-4e3c-812b-ecf51fb51ea5" actual="#[payload.message]" expected='#["Welcome to mule sreeni kandimalla"]' message="Response payload is not correct"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="entapi-cicd-hello-success-test-case-assert-that" doc:id="0c5191d6-aa3d-48bf-bdec-9240636f138c" >
+		<munit:execution>
+			<munit:set-event doc:name="Set Event" doc:id="aa5bc129-8ffb-49ad-b060-7c30849df4b8" >
+				<munit:attributes value='#[{queryParams:{fname:"sreeni",lname:"kandimalla"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to entapi-cicd-helloFlow" doc:id="317885f9-99d9-4753-9fcf-3d9959646643" name="entapi-cicd-helloFlow" />
+		</munit:execution>
+		<munit:validation >
+			<logger level="INFO" doc:name="Logger" doc:id="166a6335-208b-4c77-9304-b1910113c537" message="#[payload]" />
+			<munit-tools:assert-that doc:name="Assert that" doc:id="b6530024-9450-4e9d-9149-4b3ac5c7f7f3" expression="#[payload.message]" is='#[MunitTools::equalTo("Welcome to mule sreeni kandimalla")]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="entapi-cicd-hello-success-test-case-assert-expression" doc:id="3daf5394-52d2-4b3b-bf2a-aaf4e0bcb9a0" >
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="09370def-e327-4713-8f91-2da65b4a55b0" >
+				<munit:attributes value='#[{queryParams:{fname:"sreeni",lname:"kandimalla"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to entapi-cicd-helloFlow" doc:id="aa74ea1b-de05-4096-bea5-26cee6dfbdde" name="entapi-cicd-helloFlow" />
+		</munit:execution>
+		<munit:validation >
+			<logger level="INFO" doc:name="Logger" doc:id="e5c4a253-5159-4958-9010-90a33866824d" message="#[payload]" />
+			<munit-tools:assert doc:name="Assert expression" doc:id="fdde5e32-a1d6-4f4b-aa3b-883c039ea22d" >
+				<munit-tools:that ><![CDATA[#[import * from dw::test::Asserts 
+ ---
+payload must equalTo({
+	"message": "Welcome to mule sreeni kandimalla"
+})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
